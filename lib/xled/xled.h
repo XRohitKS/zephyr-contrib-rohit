@@ -89,4 +89,20 @@ int xled_init(struct xled *led);
  */
 int xled_set(struct xled *led, uint8_t color, uint16_t duty, uint32_t blink_ms);
 
+/* 
+ * --- API Shortcut Macros (Zero Flash Overhead) ---
+ */
+
+/* Sets a new duty cycle (brightness) while keeping color and blink period */
+#define xled_set_brightness(l, d)   xled_set((l), (l)->active_color, (d), (l)->period_ms)
+
+/* 
+ * Future/Advanced Shortcuts (Commonly used in larger projects):
+ * 
+ * #define xled_set_color(l, c)        xled_set((l), (c), (l)->active_duty, (l)->period_ms)
+ * #define xled_set_period(l, p)       xled_set((l), (l)->active_color, (l)->active_duty, (p))
+ * #define xled_off(l)                 xled_set((l), (l)->active_color, 0, 0)
+ * #define xled_on(l)                  xled_set((l), (l)->active_color, XLED_DUTY_MAX, 0)
+ */
+
 #endif /* XLED_H */

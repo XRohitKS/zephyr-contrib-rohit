@@ -77,6 +77,12 @@ int main(void)
         printk("Blinking Magenta (Slow)...\n");
         xled_set(&power_led, XLED_MAGENTA, 250, 1000);
         k_sleep(K_SECONDS(5));
+        xled_set_brightness(&power_led, 500);
+        k_sleep(K_SECONDS(2));
+        xled_set_brightness(&power_led, 4000);
+        k_sleep(K_SECONDS(2));
+        xled_set_brightness(&power_led, 8000);
+        k_sleep(K_SECONDS(2));
 
         /* 4. TURN OFF for 1 second */
         printk("Off...\n\n");
