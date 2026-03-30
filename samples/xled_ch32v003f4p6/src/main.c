@@ -14,38 +14,39 @@
 
 #include "xled.h"
 
-/* --- Configured PC5=Red, PC6=Green, PC7=Blue --- */
+/* --- Demo Mode Selection (Choose ONE by uncommenting) --- */
+#define DEMO_ALL_PWM      /* PC5, PC6, PC7 all using PWM (Full dimming) */
+// #define DEMO_MIXED_MODES  /* PC5=PWM, PC6=GPIO, PC7=PWM (Mixed Hardware) */
+// #define DEMO_ALL_GPIO     /* PC5, PC6, PC7 all using GPIO (Fast/No Math) */
+// #define DEMO_DUAL_LED     /* Only Red/Green enabled (Blue is disabled) */
+// #define DEMO_SINGLE_LED   /* Only Red enabled (Others are ignored) */
+
 static struct xled power_led = {
-    .red = {
-        .mode = XLED_PIN_PWM,
-        .hw = {
-            .pwm = {
-                .dev     = DEVICE_DT_GET(DT_NODELABEL(pwm2)), /* TIM2 CH0 → PC5 */
-                .channel = 0,
-                .period  = 48000,
-            }
-        }
-    },
-    .green = {
-        .mode = XLED_PIN_PWM,
-        .hw = {
-            .pwm = {
-                .dev     = DEVICE_DT_GET(DT_NODELABEL(pwm1)), /* TIM1 CH0 → PC6 */
-                .channel = 0,
-                .period  = 48000,
-            }
-        }
-    },
-    .blue = {
-        .mode = XLED_PIN_PWM,
-        .hw = {
-            .pwm = {
-                .dev     = DEVICE_DT_GET(DT_NODELABEL(pwm1)), /* TIM1 CH1 → PC7 */
-                .channel = 1,
-                .period  = 48000,
-            }
-        }
-    },
+#if defined(DEMO_ALL_PWM)
+    .red   = { .mode = XLED_PIN_PWM, .hw.pwm = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm2)), .channel = 0, .period = 48000 } },
+    .green = { .mode = XLED_PIN_PWM, .hw.pwm = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm1)), .channel = 0, .period = 48000 } },
+    .blue  = { .mode = XLED_PIN_PWM, .hw.pwm = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm1)), .channel = 1, .period = 48000 } },
+
+#elif defined(DEMO_MIXED_MODES)
+    .red   = { .mode = XLED_PIN_PWM,  .hw.pwm  = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm2)), .channel = 0, .period = 48000 } },
+    .green = { .mode = XLED_PIN_GPIO, .hw.gpio = { .port = DEVICE_DT_GET(DT_NODELABEL(gpioc)), .pin = 6 } },
+    .blue  = { .mode = XLED_PIN_PWM,  .hw.pwm  = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm1)), .channel = 1, .period = 48000 } },
+
+#elif defined(DEMO_ALL_GPIO)
+    .red   = { .mode = XLED_PIN_GPIO, .hw.gpio = { .port = DEVICE_DT_GET(DT_NODELABEL(gpioc)), .pin = 5 } },
+    .green = { .mode = XLED_PIN_GPIO, .hw.gpio = { .port = DEVICE_DT_GET(DT_NODELABEL(gpioc)), .pin = 6 } },
+    .blue  = { .mode = XLED_PIN_GPIO, .hw.gpio = { .port = DEVICE_DT_GET(DT_NODELABEL(gpioc)), .pin = 7 } },
+
+#elif defined(DEMO_DUAL_LED)
+    .red   = { .mode = XLED_PIN_PWM,  .hw.pwm  = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm2)), .channel = 0, .period = 48000 } },
+    .green = { .mode = XLED_PIN_PWM,  .hw.pwm  = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm1)), .channel = 0, .period = 48000 } },
+    .blue  = { .mode = XLED_PIN_NONE },
+
+#elif defined(DEMO_SINGLE_LED)
+    .red   = { .mode = XLED_PIN_PWM, .hw.pwm = { .dev = DEVICE_DT_GET(DT_NODELABEL(pwm2)), .channel = 0, .period = 48000 } },
+    .green = { .mode = XLED_PIN_NONE },
+    .blue  = { .mode = XLED_PIN_NONE },
+#endif
 };
 
 int main(void)
