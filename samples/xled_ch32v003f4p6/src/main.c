@@ -17,22 +17,34 @@
 /* --- Configured PC5=Red, PC6=Green, PC7=Blue --- */
 static struct xled power_led = {
     .red = {
-        .mode        = XLED_PIN_PWM,
-        .pwm_dev     = DEVICE_DT_GET(DT_NODELABEL(pwm2)), /* TIM2 CH0 → PC5 */
-        .pwm_channel = 0,
-        .pwm_period  = 48000,
+        .mode = XLED_PIN_PWM,
+        .hw = {
+            .pwm = {
+                .dev     = DEVICE_DT_GET(DT_NODELABEL(pwm2)), /* TIM2 CH0 → PC5 */
+                .channel = 0,
+                .period  = 48000,
+            }
+        }
     },
     .green = {
-        .mode        = XLED_PIN_PWM,
-        .pwm_dev     = DEVICE_DT_GET(DT_NODELABEL(pwm1)), /* TIM1 CH0 → PC6 */
-        .pwm_channel = 0,
-        .pwm_period  = 48000,
+        .mode = XLED_PIN_PWM,
+        .hw = {
+            .pwm = {
+                .dev     = DEVICE_DT_GET(DT_NODELABEL(pwm1)), /* TIM1 CH0 → PC6 */
+                .channel = 0,
+                .period  = 48000,
+            }
+        }
     },
     .blue = {
-        .mode        = XLED_PIN_PWM,
-        .pwm_dev     = DEVICE_DT_GET(DT_NODELABEL(pwm1)), /* TIM1 CH1 → PC7 */
-        .pwm_channel = 1,
-        .pwm_period  = 48000,
+        .mode = XLED_PIN_PWM,
+        .hw = {
+            .pwm = {
+                .dev     = DEVICE_DT_GET(DT_NODELABEL(pwm1)), /* TIM1 CH1 → PC7 */
+                .channel = 1,
+                .period  = 48000,
+            }
+        }
     },
 };
 

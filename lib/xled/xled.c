@@ -19,7 +19,7 @@
 #include "xled.h"
 
 /* --- Internal: apply color bit and duty to a single pin --- */
-static int pin_apply(const struct xled_pin *pin, uint8_t color_bit, uint16_t duty)
+static inline int pin_apply(const struct xled_pin *pin, uint8_t color_bit, uint16_t duty)
 {
     if (pin->mode == XLED_PIN_NONE) {
         return 0;
@@ -28,14 +28,14 @@ static int pin_apply(const struct xled_pin *pin, uint8_t color_bit, uint16_t dut
     if (pin->mode == XLED_PIN_PWM) {
         uint32_t pulse = 0U;
         if (color_bit && duty > 0U) {
-            pulse = (pin->pwm_period * (uint32_t)duty) / XLED_DUTY_MAX;
+            pulse = (pin->hw.pwm.period * (uint32_t)duty) / XLED_DUTY_MAX;
         }
-        return pwm_set_cycles(pin->pwm_dev, pin->pwm_channel,
-                              pin->pwm_period, pulse, 0);
+        return pwm_set_cycles(pin->hw.pwm.dev, pin->hw.pwm.channel,
+                              pin->hw.pwm.period, pulse, 0);
     }
 
     /* XLED_PIN_GPIO */
-    return gpio_pin_set(pin->gpio_port, pin->gpio_pin,
+    return gpio_pin_set(pin->hw.gpio.port, pin->hw.gpio.pin,
                         (color_bit && duty > 0U) ? 1 : 0);
 }
 
@@ -66,17 +66,17 @@ static int pin_init_dev(const struct xled_pin *pin)
     }
 
     if (pin->mode == XLED_PIN_PWM) {
-        if (!device_is_ready(pin->pwm_dev)) {
+        if (!device_is_ready(pin->hw.pwm.dev)) {
             return -ENODEV;
         }
-        return pwm_set_cycles(pin->pwm_dev, pin->pwm_channel,
-                              pin->pwm_period, 0U, 0);
+        return pwm_set_cycles(pin->hw.pwm.dev, pin->hw.pwm.channel,
+                              pin->hw.pwm.period, 0U, 0);
     }
 
-    if (!device_is_ready(pin->gpio_port)) {
+    if (!device_is_ready(pin->hw.gpio.port)) {
         return -ENODEV;
     }
-    return gpio_pin_configure(pin->gpio_port, pin->gpio_pin,
+    return gpio_pin_configure(pin->hw.gpio.port, pin->hw.gpio.pin,
                               GPIO_OUTPUT_INACTIVE);
 }
 

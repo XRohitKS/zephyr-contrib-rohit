@@ -40,16 +40,19 @@ typedef enum {
  * Per-pin configuration.
  */
 struct xled_pin {
-    xled_pin_mode_t mode;
+    uint8_t mode; /* xled_pin_mode_t */
 
-    /* GPIO */
-    const struct device *gpio_port;
-    gpio_pin_t           gpio_pin;
-
-    /* PWM */
-    const struct device *pwm_dev;
-    uint32_t             pwm_channel;
-    uint32_t             pwm_period;
+    union {
+        struct {
+            const struct device *port;
+            gpio_pin_t           pin;
+        } gpio;
+        struct {
+            const struct device *dev;
+            uint32_t             channel;
+            uint32_t             period;
+        } pwm;
+    } hw;
 };
 
 /* --- XLED Handle --- */
