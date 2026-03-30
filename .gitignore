@@ -1,0 +1,15 @@
+# Zephyr Build Directory
+build/
+build_*/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+zephyr/
+modules/
+cmake-build-*/
+.DS_Store
