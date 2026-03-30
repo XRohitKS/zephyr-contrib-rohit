@@ -125,7 +125,7 @@ int xled_set(struct xled *led, uint8_t color, uint16_t duty, uint32_t blink_ms)
     } else {
         /* Apply initial state then start background timer */
         apply_state(led, duty);
-        k_timer_start(&led->timer, K_MSEC(blink_ms), K_MSEC(blink_ms));
+        k_timer_start(&led->timer, K_MSEC((int32_t)blink_ms), K_MSEC((int32_t)blink_ms));
     }
 
     return 0;

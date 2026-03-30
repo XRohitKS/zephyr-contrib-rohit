@@ -69,6 +69,7 @@ int main(void)
         printk("Off...\n\n");
         xled_set(&power_led, XLED_OFF, 0, 0);
         k_sleep(K_SECONDS(1));
+        // k_msleep(1000); // k_msleep took more rom ( 4 Bytes more only every k_msleep call) as compared to k_sleep
     }
 
     return 0;
