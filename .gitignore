@@ -6,11 +6,11 @@ build_*/
 .vscode/
 .idea/
 .clangd
+.cache
 *.swp
 *.swo
 
 # Project specific
-zephyr/
 modules/
 cmake-build-*/
 .DS_Store
