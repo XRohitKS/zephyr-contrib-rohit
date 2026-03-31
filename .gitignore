@@ -5,6 +5,7 @@ build_*/
 # IDE settings
 .vscode/
 .idea/
+.clangd
 *.swp
 *.swo
 
