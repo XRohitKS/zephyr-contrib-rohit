@@ -1,0 +1,37 @@
+description: Compact RGB LED driver with one backend per color channel.
+compatible: "zephyrcontrib,xled"
+include: [base.yaml]
+
+properties:
+  pin1-gpios:
+    type: phandle-array
+    required: false
+    specifier-space: gpio
+    description: Red channel GPIO backend.
+  pin1-pwms:
+    type: phandle-array
+    required: false
+    specifier-space: pwm
+    description: Red channel PWM backend.
+
+  pin2-gpios:
+    type: phandle-array
+    required: false
+    specifier-space: gpio
+    description: Green channel GPIO backend.
+  pin2-pwms:
+    type: phandle-array
+    required: false
+    specifier-space: pwm
+    description: Green channel PWM backend.
+
+  pin3-gpios:
+    type: phandle-array
+    required: false
+    specifier-space: gpio
+    description: Blue channel GPIO backend.
+  pin3-pwms:
+    type: phandle-array
+    required: false
+    specifier-space: pwm
+    description: Blue channel PWM backend.

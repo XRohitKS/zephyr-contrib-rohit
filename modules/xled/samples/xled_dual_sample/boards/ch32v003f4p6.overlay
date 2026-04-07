@@ -1,0 +1,93 @@
+#include <zephyr/dt-bindings/pinctrl/ch32v003-pinctrl.h>
+
+#define PWM_PERIOD 20000
+
+&tim1 {
+	status = "okay";
+	pwm1: pwm {
+		status = "okay";
+		pinctrl-0 = <&pc3_pwm &pc4_pwm &pc6_pwm &pc7_pwm>;
+		pinctrl-names = "default";
+	};
+};
+
+&tim2 {
+	status = "okay";
+	pwm2: pwm {
+		status = "okay";
+		pinctrl-0 = <&pc2_pwm &pc5_pwm>;
+		pinctrl-names = "default";
+	};
+};
+
+/ {
+	led_xled_1: led_xled_1 {
+		compatible = "zephyrcontrib,xled";
+		pin1-pwms = <&pwm2 1 PWM_PERIOD 0>;
+		pin2-pwms = <&pwm1 2 PWM_PERIOD 0>;
+		pin3-pwms = <&pwm1 3 PWM_PERIOD 0>;
+	};
+
+	led_xled_2: led_xled_2 {
+		compatible = "zephyrcontrib,xled";
+		pin1-pwms = <&pwm2 0 PWM_PERIOD 0>;
+		pin2-pwms = <&pwm1 0 PWM_PERIOD 0>;
+		pin3-pwms = <&pwm1 1 PWM_PERIOD 0>;
+	};
+};
+
+&pinctrl {
+	pc6_pwm: pwm_pc6 {
+		group1 {
+			pinmux = <TIM1_CH1_PC6_1>, <TIM1_CH2_PC7_1>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+
+	pc7_pwm: pwm_pc7 {
+		group1 {
+			pinmux = <TIM1_CH2_PC7_1>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+
+	pc3_pwm: pwm_pc3 {
+		group1 {
+			pinmux = <TIM1_CH3_PC3_0>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+
+	pc4_pwm: pwm_pc4 {
+		group1 {
+			pinmux = <TIM1_CH4_PC4_0>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+
+	pc5_pwm: pwm_pc5 {
+		group1 {
+			pinmux = <TIM2_CH1_PC5_1>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+
+	pc2_pwm: pwm_pc2 {
+		group1 {
+			pinmux = <TIM2_CH2_PC2_1>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+};

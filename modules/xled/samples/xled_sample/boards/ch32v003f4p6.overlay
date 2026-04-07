@@ -1,0 +1,50 @@
+#include <zephyr/dt-bindings/pinctrl/ch32v003-pinctrl.h>
+
+#define PWM_PERIOD 20000
+
+&tim2 {
+	status = "okay";
+	pwm2: pwm {
+		status = "okay";
+		pinctrl-0 = <&pc5_pwm>;
+		pinctrl-names = "default";
+	};
+};
+
+&tim1 {
+	status = "okay";
+	pwm1: pwm {
+		status = "okay";
+		pinctrl-0 = <&pc6_pwm &pc7_pwm>;
+		pinctrl-names = "default";
+	};
+};
+
+/ {
+	led_xled: xled_0 {
+		compatible = "zephyrcontrib,xled";
+		pin1-pwms = <&pwm2 0 PWM_PERIOD 0>;
+		pin2-pwms = <&pwm1 0 PWM_PERIOD 0>;
+		pin3-pwms = <&pwm1 1 PWM_PERIOD 0>;
+	};
+};
+
+&pinctrl {
+	pc5_pwm: pwm_pc5 {
+		group1 {
+			pinmux = <TIM2_CH1_PC5_1>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+
+	pc6_pwm: pc7_pwm: tim1_ch1_ch2_pwm {
+		group1 {
+			pinmux = <TIM1_CH1_PC6_1>, <TIM1_CH2_PC7_1>;
+			drive-push-pull;
+			output-low;
+			slew-rate = "max-speed-10mhz";
+		};
+	};
+};

@@ -11,6 +11,10 @@ build_*/
 *.swo
 
 # Project specific
-modules/
 cmake-build-*/
 .DS_Store
+archive/
+apps/
+modules/*/build/
+modules/*/.cache/
+modules/*/build_*/

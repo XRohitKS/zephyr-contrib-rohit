@@ -1,63 +1,77 @@
-# 🌟 Zephyr Contrib: Rohit's Embedded Toolbox
+# zephyr-contrib-rohit
 
-A collection of highly optimized, professional-grade libraries and drivers for the **Zephyr RTOS**, with a focus on ultra-constrained hardware like the **CH32V003**.
+This repo is structured like a small Zephyr contrib workspace:
 
-## 📦 What's inside?
+- reusable modules live in `modules/`
+- public module samples live in each module's `samples/` folder
+- root `apps/` is reserved for local experiments and is ignored by Git
 
-### 🔹 [xLED](./lib/xled)
-The **xLED** library is a versatile "Extended" LED driver designed for flexibility and efficiency. It handles anything from a single status LED to full RGB arrays, supporting both **Hardware PWM** and **GPIO switching** in a mixed configuration.
+This root structure keeps reusable module code separate from local experiments and scales well if you add more modules later.
 
-**Key Features:**
-- **Hybrid Mixed Configuration**: Mix and match Hardware PWM pins and GPIO pins seamlessly for a single RGB handle.
-- **Versatile Modes**: 
-  - **PWM Generation**: Use it to generate PWM signals for brightness control.
-  - **Single LED**: Configure only one pin for a simple status indicator.
-  - **Partial RGB**: Use any 2 LEDs (e.g., Red/Green only) by leaving unused pins as `XLED_PIN_NONE`.
-- **Background Blinking**: Built-in non-blocking background toggling using Zephyr's `k_timer`.
-- **Ultra-Lightweight**: Minimal RAM footprint, ideal for memory-constrained chips like the CH32V003.
-- **Simple API**: Set color, duty cycle (0-10000), and blink period in one function call.
+## Layout
 
----
-
-## 🚀 Repository Structure
-
-```bash
-.
-├── lib/
-│   └── xled/            # 📂 xLED Implementation (xled.c, xled.h)
-├── samples/
-│   └── ch32v003f4p6_xled/ # 🎯 Demo for CH32V003F4P6 chip
-├── README.md
-└── LICENSE
+```text
+zephyr-contrib-rohit/
+|- modules/
+|  \- xled/
+|     \- samples/
+|        |- xled_sample/
+|        |- xled_dual_sample/
+|        |- xled_pwm_gpio_mix_sample/
+|        \- xled_dual_less_pin_sample/
+\- README.md
 ```
 
-## 🛠️ Usage
+## Current module
 
-To use **xLED** in your Zephyr project:
-1. Copy `lib/xled/xled.h` and `lib/xled/xled.c` into your project.
-2. In your `CMakeLists.txt`, add:
-   ```cmake
-   target_sources(app PRIVATE lib/xled/xled.c)
-   zephyr_include_directories(lib/xled)
-   ```
-3. Initialize the configuration in your code:
-   ```c
-   #include "xled.h"
-   
-   static struct xled status_led = {
-       .red = { .mode = XLED_PIN_PWM, .pwm_dev = DEVICE_DT_GET(PWM_NODE), ... },
-       .green = { .mode = XLED_PIN_GPIO, .gpio_port = DEVICE_DT_GET(GPIO_NODE), ... },
-       .blue = { .mode = XLED_PIN_NONE }, // Skip BLUE
-   };
-   
-   xled_init(&status_led);
-   xled_set(&status_led, XLED_RED, 5000, 250); // 50% Red, blinking every 250ms
-   ```
+`modules/xled` is a lightweight Zephyr RGB LED module using the compatible:
 
----
+`zephyrcontrib,xled`
 
-## ⚡ Contributing
+It keeps the existing API:
 
-This is a personal collection. If you have an optimization suggestion or a bug fix, feel free to open a PR!
+- `xled_set(dev, color, duty, blink_ms)`
+- `xled_set_brightness(dev, duty)`
+- `xled_on(dev)`
+- `xled_off(dev)`
 
-*Created by Rohit*
+## Build flow
+
+Before building, make sure `west` works in your shell and your Zephyr toolchain paths are set up.
+
+```powershell
+# Example
+west --version
+```
+
+Then build any sample from this repo root:
+
+```powershell
+west build -b ch32v003f4p6 .\modules\xled\samples\xled_sample
+west build -b ch32v003f4p6 .\modules\xled\samples\xled_dual_sample
+west build -b ch32v003f4p6 .\modules\xled\samples\xled_pwm_gpio_mix_sample
+west build -b ch32v003f4p6 .\modules\xled\samples\xled_dual_less_pin_sample
+```
+
+If needed, you can also pass the module explicitly:
+
+```powershell
+west build -b ch32v003f4p6 .\modules\xled\samples\xled_sample -- "-DZEPHYR_EXTRA_MODULES=$PWD\modules\xled"
+```
+
+## Sample overview
+
+- `xled_sample`: one RGB XLED instance
+- `xled_dual_sample`: two full XLED instances
+- `xled_pwm_gpio_mix_sample`: one instance mixing PWM and GPIO channels
+- `xled_dual_less_pin_sample`: partial-channel setup with one red-only LED and one red+green LED
+
+## Future growth
+
+If you add more reusable drivers later, keep following the same pattern:
+
+- `modules/<name>/` for the reusable Zephyr module
+- `modules/<name>/samples/<sample-name>/` for public examples
+- `apps/<sample-name>/` only for local experiments that should not be committed
+
+That will keep this repo easy to maintain and easy to share.

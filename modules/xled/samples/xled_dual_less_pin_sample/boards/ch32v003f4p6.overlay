@@ -1,0 +1,14 @@
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/ {
+	led_xled_red_only: xled_red_only {
+		compatible = "zephyrcontrib,xled";
+		pin1-gpios = <&gpioc 2 GPIO_ACTIVE_HIGH>; /* Red only */
+	};
+
+	led_xled_rg_only: xled_rg_only {
+		compatible = "zephyrcontrib,xled";
+		pin1-gpios = <&gpioc 3 GPIO_ACTIVE_HIGH>; /* Red */
+		pin2-gpios = <&gpioc 4 GPIO_ACTIVE_HIGH>; /* Green */
+	};
+};

@@ -1,0 +1,15 @@
+menuconfig XLED
+	bool "XLED RGB driver"
+	default y
+	help
+	  Enable the XLED RGB driver module.
+
+if XLED
+
+config XLED_INIT_PRIORITY
+	int "XLED initialization priority"
+	default 80
+	help
+	  Initialization priority for XLED device instances.
+
+endif # XLED
