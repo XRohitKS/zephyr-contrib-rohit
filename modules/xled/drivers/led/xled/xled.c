@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 Rohit
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #define DT_DRV_COMPAT zephyrcontrib_xled
 
 #include <zephyr/kernel.h>
@@ -192,8 +198,3 @@ static const struct xled_api xled_api_funcs = {
 			      &xled_api_funcs);
 
 DT_INST_FOREACH_STATUS_OKAY(XLED_INST_DEFINE)
-/*
- * Copyright (c) 2026 Rohit
- *
- * SPDX-License-Identifier: Apache-2.0
- */

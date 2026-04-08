@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 Rohit
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/xled.h>
@@ -25,8 +31,3 @@ int main(void)
 		k_msleep(2000);
 	}
 }
-/*
- * Copyright (c) 2026 Rohit
- *
- * SPDX-License-Identifier: Apache-2.0
- */

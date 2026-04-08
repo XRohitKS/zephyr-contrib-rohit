@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 Rohit
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef ZEPHYR_DRIVERS_LED_XLED_H_
 #define ZEPHYR_DRIVERS_LED_XLED_H_
 
@@ -60,8 +66,3 @@ static inline int xled_off(const struct device *dev)
 #endif
 
 #endif /* ZEPHYR_DRIVERS_LED_XLED_H_ */
-/*
- * Copyright (c) 2026 Rohit
- *
- * SPDX-License-Identifier: Apache-2.0
- */
